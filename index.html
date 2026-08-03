@@ -341,25 +341,120 @@
         </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer with Visitor Web Counter & Admin Portal -->
     <footer id="legal" class="bg-slate-900 border-t border-slate-800 py-8 px-4 text-xs text-slate-500 mt-auto">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-            <div>
-                <p class="text-slate-400 font-medium">EyeOnVegas.com &copy; 2026. All rights reserved.</p>
-                <p class="mt-1">Independent Las Vegas local directory & news portal. All brand names belong to their respective owners.</p>
+        <div class="max-w-7xl mx-auto flex flex-col gap-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <div>
+                    <p class="text-slate-400 font-medium">EyeOnVegas.com &copy; 2026. All rights reserved.</p>
+                    <p class="mt-1">Independent Las Vegas local directory & news portal. All brand names belong to their respective owners.</p>
+                </div>
+                <div class="flex items-center gap-4 text-slate-400">
+                    <a href="#news" class="hover:text-amber-400 transition-colors">News</a>
+                    <a href="#directory" class="hover:text-amber-400 transition-colors">Directory</a>
+                    <a href="#legal" class="hover:text-amber-400 transition-colors">Privacy & Terms</a>
+                </div>
             </div>
-            <div class="flex gap-4 text-slate-400">
-                <a href="#news" class="hover:text-amber-400 transition-colors">News</a>
-                <a href="#directory" class="hover:text-amber-400 transition-colors">Directory</a>
-                <a href="#legal" class="hover:text-amber-400 transition-colors">Privacy & Terms</a>
+
+            <!-- Web Counter Bar -->
+            <div class="border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-950/50 p-4 rounded-xl">
+                <div class="flex items-center gap-4 text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="eye" class="w-4 h-4 text-amber-400"></i>
+                        <span>Visitors Today: <strong id="todayCount" class="text-slate-200">142</strong></span>
+                    </div>
+                    <span class="text-slate-700">|</span>
+                    <div>
+                        <span>Total Views: <strong id="totalCount" class="text-amber-400 font-mono">12,489</strong></span>
+                    </div>
+                </div>
+
+                <button onclick="openAdminModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 transition-all flex items-center gap-1.5 text-xs font-semibold">
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Admin
+                </button>
             </div>
         </div>
     </footer>
+
+    <!-- Admin Portal Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <div class="flex items-center gap-2 mb-4">
+                <div class="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg text-amber-400">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">EyeOnVegas Admin Login</h3>
+            </div>
+
+            <!-- Login View -->
+            <div id="adminLoginForm" class="space-y-4">
+                <p class="text-xs text-slate-400">Enter your administrator access code to view domain analytics and traffic controls.</p>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Passcode</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-400">
+                </div>
+                <p id="adminError" class="text-xs text-rose-400 hidden flex items-center gap-1">
+                    <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Invalid admin password.
+                </p>
+                <button onclick="authenticateAdmin()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl text-sm transition-all">
+                    Unlock Dashboard
+                </button>
+            </div>
+
+            <!-- Unlocked Admin View -->
+            <div id="adminDashboard" class="hidden space-y-4">
+                <div class="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-xl text-xs text-emerald-400 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Authenticated as Administrator
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl">
+                        <div class="text-xs text-slate-400">Today</div>
+                        <div class="text-xl font-bold text-amber-400 mt-1" id="dashToday">142</div>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl">
+                        <div class="text-xs text-slate-400">Total Hits</div>
+                        <div class="text-xl font-bold text-white mt-1" id="dashTotal">12,489</div>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button onclick="resetCounter()" class="w-full bg-slate-800 hover:bg-rose-950/50 hover:border-rose-800/50 text-slate-300 hover:text-rose-300 border border-slate-700 py-2 rounded-xl text-xs font-semibold transition-all">
+                        Reset Traffic Stats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Admin Credentials
+        const ADMIN_PASS = "Vegas2026!";
+
+        // Web Counter Logic (Using localStorage)
+        function initCounter() {
+            let total = parseInt(localStorage.getItem('eov_total_views') || '12489');
+            let today = parseInt(localStorage.getItem('eov_today_views') || '142');
+
+            // Increment on page load
+            total += 1;
+            today += 1;
+
+            localStorage.setItem('eov_total_views', total);
+            localStorage.setItem('eov_today_views', today);
+
+            document.getElementById('totalCount').textContent = total.toLocaleString();
+            document.getElementById('todayCount').textContent = today.toLocaleString();
+        }
+        initCounter();
 
         // Las Vegas Clock Function
         function updateVegasClock() {
@@ -407,7 +502,44 @@
             });
         });
 
-        // Simple Advertise Modal Handler Placeholder
+        // Modal Controls
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminError').classList.add('hidden');
+        }
+
+        function authenticateAdmin() {
+            const input = document.getElementById('adminPassword').value;
+            const err = document.getElementById('adminError');
+            
+            if (input === ADMIN_PASS) {
+                err.classList.add('hidden');
+                document.getElementById('adminLoginForm').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                
+                document.getElementById('dashTotal').textContent = localStorage.getItem('eov_total_views');
+                document.getElementById('dashToday').textContent = localStorage.getItem('eov_today_views');
+            } else {
+                err.classList.remove('hidden');
+            }
+        }
+
+        function resetCounter() {
+            if (confirm("Reset visitor statistics?")) {
+                localStorage.setItem('eov_total_views', '1');
+                localStorage.setItem('eov_today_views', '1');
+                document.getElementById('totalCount').textContent = '1';
+                document.getElementById('todayCount').textContent = '1';
+                document.getElementById('dashTotal').textContent = '1';
+                document.getElementById('dashToday').textContent = '1';
+            }
+        }
+
         function openAdvertiseModal() {
             alert("Advertising options for EyeOnVegas.com:\n\nContact advertise@eyeonvegas.com for featured listing options.");
         }
